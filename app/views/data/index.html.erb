@@ -1,0 +1,52 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Data</h1>
+
+<h3>Завантажувати дані</h3>
+<%= form_tag import_data_path(:file), multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag 'Завантажити дані'%>
+<% end %>
+
+<div class="container">
+  <% if @data!=nil %>
+      <table class="table table-bordered table-striped" style="width: 23%; float: left;">
+        <tr class="info">
+          <th >№</th>
+          <th>x</th>
+        </tr>
+
+        <% @data.each.with_index do |datum, index| %>
+            <tr>
+              <td><%= index +1 %></td>
+              <td><%= datum %></td>
+            </tr>
+        <% end %>
+
+      </table>
+      <table class="table table-bordered table-striped" style="width: 73%; float: right;">
+        <tr class="info">
+          <th>№ варіанти</th>
+          <th>Значення варіанти</th>
+          <th>Частота</th>
+          <th>Відносна частота</th>
+          <th>Значення емпіричної
+            функції розподілу</th>
+        </tr>
+        <% @variation_range.each.with_index do |var_range, index| %>
+            <tr>
+              <td><%= index + 1%></td>
+              <td><%= var_range.value%></td>
+              <td><%= var_range.frequency%></td>
+              <td><%= var_range.relative_frequency%></td>
+              <td><%= var_range.empirical_func %></td>
+            </tr>
+        <% end%>
+      </table>
+  <% end %>
+
+</div>
+
+<br>
+
+<%= link_to 'New Datum', new_datum_path %>

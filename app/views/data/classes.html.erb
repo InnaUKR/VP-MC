@@ -1,0 +1,259 @@
+<h1>Classes</h1>
+<h2>Рекомендована кількість классів - <%= @class_numb %></h2>
+<% if @data!=nil %>
+    <div class="container">
+<table class="table table-bordered table-striped" style="width: 50%; float: left;">
+  <tr class="info">
+    <th>№ варіанти</th>
+    <th>Значення варіанти</th>
+    <th>Значення варіанти2</th>
+    <th>Частота</th>
+    <th>Відносна частота</th>
+    <th>Значення емпіричної
+      функції розподілу</th>
+  </tr>
+  <% @classes.each.with_index do |i_class, index| %>
+      <tr>
+        <td><%= index + 1%></td>
+        <td><%= i_class.a_border%></td>
+        <td><%= i_class.b_border%></td>
+        <td><%= i_class.frequency%></td>
+        <td><%= i_class.relative_frequency%></td>
+        <td><%= i_class.empirical_func%></td>
+      </tr>
+  <% end%>
+</table>
+<% end %>
+
+
+
+</div>
+
+<script>
+    $(function () {
+        $('#container_histogram').highcharts({
+            chart: {
+                //type: 'column'
+            },
+            title: {
+                text: 'Monthly Average Rainfall'
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com'
+            },
+            xAxis: {
+                gridLineWidth: 1,
+                categories: <%= @borders_arr %>
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rainfall (mm)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px"></span><table>',
+                pointFormat:  '<b> {point.y:,.2f}</b>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Histogram',
+                    type: 'column',
+                    data: <%= @relative_frequency_arr << 0 %>,
+                    pointPadding: 0,
+                    groupPadding: 0,
+                    pointPlacement: 'between'
+                }
+
+
+
+            ]
+        });
+    });
+</script>
+
+
+
+<div id="container_histogram" class='container' style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    $(function () {
+        $('#container_emp_func_var_range').highcharts({
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Height Versus Weight of 507 Individuals by Gender'
+            },
+            subtitle: {
+                text: 'Source: Heinz  2003'
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Height (cm)'
+                },
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true
+            },
+            yAxis: {
+                title: {
+                    text: 'Weight (kg)'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 70,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+                borderWidth: 1
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100,100,100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        pointFormat: '{point.x}, {point.y} kg'
+                    }
+                }
+            },
+            series: [{
+                data: <%= @emp_func_arr %>
+            }]
+        });
+    })
+</script>
+
+
+
+
+
+
+<div id="container_emp_func_var_range" class='container' style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+
+<script>
+    $(function () {
+
+        (function (Highcharts) {
+
+            var SplineSeries = Highcharts.seriesTypes.spline;
+
+            // override the drawLine method
+            var splineDrawGraph = SplineSeries.prototype.drawGraph;
+            SplineSeries.prototype.drawGraph = function () {
+
+                var arrowLength = 15,
+                    arrowWidth = 8,
+                    series = this,
+                    segments = series.points,
+                    lastPoint = segments[segments.length - 1],
+                    nextLastPoint = segments[segments.length - 2],
+                    angle = Math.atan((lastPoint.plotX - nextLastPoint.plotX) /
+                        (lastPoint.plotY - nextLastPoint.plotY)),
+                    path = [];
+
+                if (angle < 0) {
+                    angle = Math.PI + angle;
+                }
+
+                // call the original method
+                splineDrawGraph.apply(series, arguments);
+
+                console.log(path);
+
+                // last point
+                path.push('M', lastPoint.plotX, lastPoint.plotY);
+                path.push(
+                    'L',
+                    lastPoint.plotX + arrowWidth * Math.cos(angle),
+                    lastPoint.plotY - arrowWidth * Math.sin(angle)
+                );
+                path.push(
+                    lastPoint.plotX + arrowLength * Math.sin(angle),
+                    lastPoint.plotY + arrowLength * Math.cos(angle)
+                );
+                path.push(
+                    lastPoint.plotX - arrowWidth * Math.cos(angle),
+                    lastPoint.plotY + arrowWidth * Math.sin(angle),
+                    'Z'
+                );
+
+                series.chart.renderer.path(path)
+                    .attr({
+                        fill: series.color
+                    })
+                    .add(series.group);
+
+            };
+
+        }(Highcharts));
+
+
+        var chart = new Highcharts.Chart({
+
+            chart: {
+                renderTo: 'container_emp_func_class',
+                type: 'spline'
+            },
+
+
+            series: [
+          <% @emp_func_class_arr.each do |x| %>
+                {
+                data: <%= x%>,
+                marker: {
+                    enabled: false
+                }
+            },
+                <% end %>
+
+
+
+            ]
+
+        });
+    })
+</script>
+
+
+
+<div id="container_emp_func_class" class='container' style="min-width: 400px; height: 400px; margin: 0 auto"></div>
