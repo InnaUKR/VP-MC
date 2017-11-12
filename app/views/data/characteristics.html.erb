@@ -1,62 +1,95 @@
 <h1>Characteristics</h1>
+<a href=<%=classes_data_url%> class="previous">&laquo; Previous</a>
     <div class="container">
 <table class="table table-bordered table-striped" style="width: 50%; float: left;">
   <tr class="info">
     <th></th>
     <th>Значення</th>
-    <th>Середньоквадратичне
-      відхилення</th>
-    <th>Довірчий інтервал</th>
+    <th>Середньоквадратичне відхилення</th>
+    <th>Довірчий інтервал θн</th>
+    <th>Довірчий інтервал θв</th>
   </tr>
 
       <tr>
         <td>Середнє арифметичне</td>
         <td><%= @average_value %></td>
-        <td><%= @average_value_MSD  %></td>
-        <td></td>
+        <td><%= @average_value_  %></td>
+        <td><%= @average_value_H  %></td>
+        <td><%= @average_value_B  %></td>
       </tr>
 
       <tr>
         <td>Медіана</td>
-        <td><%= @mediana  %></td>
+        <td><%= @median  %></td>
+        <td>-</td>
         <td>-</td>
         <td>-</td>
       </tr>
 
       <tr>
         <td>Середньоквадратичне</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><%= @medium_square  %></td>
+        <td><%= @medium_square_ %></td>
+        <td><%= @medium_square_H%></td>
+        <td><%= @medium_square_B%></td>
       </tr>
 
       <tr>
         <td>Коефіцієнт асиметрії</td>
-        <td><%= @asymmetry_coef %></td>
-        <td></td>
-        <td></td>
+        <td><%= @asymmetry_coefficient %></td>
+        <td><%= @asymmetry_coefficient_ %></td>
+        <td><%= @asymmetry_coefficient_H %></td>
+        <td><%= @asymmetry_coefficient_B %></td>
       </tr>
 
       <tr>
         <td>Коефіцієнт ексцесу</td>
-        <td><%= @excess_coef %></td>
-        <td></td>
-        <td></td>
+        <td><%= @excess_coefficient %></td>
+        <td><%= @excess_coefficient_ %></td>
+        <td><%= @excess_coefficient_H %></td>
+        <td><%= @excess_coefficient_B %></td>
       </tr>
 
       <tr>
         <td>Коефіцієнт контрексцесу</td>
-        <td><%= @counterexcess_coef %></td>
-        <td></td>
-        <td></td>
+        <td><%= @contraccess_coefficient %></td>
+        <td><%= @contraccess_coefficient_ %></td>
+        <td><%= @contraccess_coefficient_H %></td>
+        <td><%= @contraccess_coefficient_B %></td>
       </tr>
 
       <tr>
         <td>Коефіцієнт варіації</td>
-        <td><%= @variation_coef %></td>
-        <td></td>
-        <td></td>
+        <td><%= @pearson_coefficient %></td>
+        <td><%= @pearson_coefficient_ %></td>
+        <td><%= @pearson_coefficient_H %></td>
+        <td><%= @pearson_coefficient_B %></td>
       </tr>
 
 </table>
 </div>
+
+<p>a=<%= @a %></p>
+<p>b=<%= @b %></p>
+<div>
+  <table class="table table-bordered table-striped" style="width: 73%; float: right;">
+    <tr class="info">
+      <th>№ варіанти</th>
+      <th>Значення варіанти</th>
+      <th>Частота</th>
+      <th>Відносна частота</th>
+      <th>Значення емпіричної
+        функції розподілу</th>
+    </tr>
+    <% @anomaly.each.with_index do |var_range, index| %>
+        <tr>
+          <td><%= index + 1%></td>
+          <td><%= var_range.value%></td>
+          <td><%= var_range.frequency%></td>
+          <td><%= var_range.relative_frequency%></td>
+          <td><%= var_range.empirical_func %></td>
+        </tr>
+    <% end%>
+  </table>
+</div>
+<%= link_to 'Видалити аномалії', data_path, :confirm => 'Are you sure?', :method => :delete %>

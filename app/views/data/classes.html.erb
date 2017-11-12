@@ -1,5 +1,19 @@
 <h1>Classes</h1>
+
+<a href=<%=data_url%> class="previous">&laquo; Previous</a>
+<a href=<%=characteristics_data_url%> class="next">Next &raquo;</a>
+
 <h2>Рекомендована кількість классів - <%= @class_numb %></h2>
+
+
+<%= form_tag({:controller => "data", :action => "classes"}, {:method => "get"}) do %>
+  <label for="lookup">Кількість класів</label>
+  <%= text_field_tag :user_class_number%>
+<%= submit_tag "Задати" %>
+<% end %>
+
+
+<h2>Задана кількість классів - <%= @user_class_number %></h2>
 <% if @data!=nil %>
     <div class="container">
 <table class="table table-bordered table-striped" style="width: 50%; float: left;">
@@ -28,67 +42,6 @@
 
 
 </div>
-
-<script>
-    $(function () {
-        $('#container_histogram').highcharts({
-            chart: {
-                //type: 'column'
-            },
-            title: {
-                text: 'Monthly Average Rainfall'
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com'
-            },
-            xAxis: {
-                gridLineWidth: 1,
-                categories: <%= @borders_arr %>
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Rainfall (mm)'
-                }
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:10px"></span><table>',
-                pointFormat:  '<b> {point.y:,.2f}</b>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [
-                {
-                    name: 'Histogram',
-                    type: 'column',
-                    data: <%= @relative_frequency_arr << 0 %>,
-                    pointPadding: 0,
-                    groupPadding: 0,
-                    pointPlacement: 'between'
-                }
-
-
-
-            ]
-        });
-    });
-</script>
-
-
-
-<div id="container_histogram" class='container' style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-
-
-
-
-
 
 
 
@@ -170,6 +123,73 @@
 <div id="container_emp_func_var_range" class='container' style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 
 
+
+
+<script>
+    $(function () {
+        $('#container_histogram').highcharts({
+            chart: {
+                //type: 'column'
+            },
+            title: {
+                text: 'Monthly Average Rainfall'
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com'
+            },
+            xAxis: {
+                gridLineWidth: 1,
+                categories: <%= @borders_arr %>
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rainfall (mm)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px"></span><table>',
+                pointFormat:  '<b> {point.y:,.2f}</b>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Histogram',
+                    type: 'column',
+                    data: <%= @relative_frequency_arr << 0 %>,
+                    pointPadding: 0,
+                    groupPadding: 0,
+                    pointPlacement: 'between'
+                }
+
+
+
+            ]
+        });
+    });
+</script>
+
+
+
+<div id="container_histogram" class='container' style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+
+
+
+
+
+
+
+
+
 <script>
     $(function () {
 
@@ -199,6 +219,7 @@
                 splineDrawGraph.apply(series, arguments);
 
                 console.log(path);
+                lastPoint.plotX -= arrowLength - 1.5;
 
                 // last point
                 path.push('M', lastPoint.plotX, lastPoint.plotY);
@@ -234,6 +255,20 @@
                 renderTo: 'container_emp_func_class',
                 type: 'spline'
             },
+
+            plotOptions: {
+              series: {
+                  enableMouseTracking: false,
+                  marker: {
+                      enabled: false,
+                      states: {
+                          hover: {
+                              enabled: false
+                          }
+                      }
+                  }
+              }
+          },
 
 
             series: [
