@@ -1,8 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Data</h1>
+<h1>Завантаження даних</h1>
+  <% if @data!=nil %>
+    <a href=<%=classes_data_url%> class="next">Next &raquo;</a>
+  <% end %>
 
-<h3>Завантажувати дані</h3>
+<h3>Завантажити дані</h3>
 <%= form_tag import_data_path(:file), multipart: true do %>
     <%= file_field_tag :file %>
     <%= submit_tag 'Завантажити дані'%>
@@ -49,4 +52,4 @@
 
 <br>
 
-<%= link_to 'New Datum', new_datum_path %>
+<%= link_to 'vud', data_path, :method => :destroy  %>
